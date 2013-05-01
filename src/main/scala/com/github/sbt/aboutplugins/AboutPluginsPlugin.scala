@@ -15,25 +15,33 @@ object AboutPluginsPlugin extends Plugin {
 
     state.log.info("The following plugins are loaded with this build:")
 
-    val pluginNames = structure.units.values.flatMap(un => un.unit.plugins.pluginNames).toSeq
-    val artifactPaths: Seq[String] = for {
-      name <- pluginNames
-      source <- Option(Class.forName(name).getProtectionDomain.getCodeSource)
+    val pluginNamesAndLoaders = structure.units.values.map(un => (un.unit.plugins.pluginNames, un.unit.plugins.loader)).toSeq
+    val pluginArtifactPaths: Seq[(String, String)] = for {
+      (names, loader) <- pluginNamesAndLoaders
+      name <- names
+      source <- Option(Class.forName(name, true, loader).getProtectionDomain.getCodeSource)
       location <- Option(source.getLocation)
-    } yield location.getPath
+    } yield (name, location.getPath)
 
     val reports: Seq[UpdateReport] = structure.units.values.flatMap(un => un.unit.plugins.pluginData.report).toSeq
     reports.foreach {
       report =>
-        val plugins = report.configurations.flatMap(_.modules).distinct.filter {
-          moduleReport => moduleReport.artifacts.exists {
-            case (_, file) => artifactPaths.contains(file.getPath)
-          }
-        }.map(_.module).distinct
+        val moduleReports: Map[ModuleID, Seq[(Artifact, File)]] = (for {
+          configReport <- report.configurations
+          moduleReport <- configReport.modules
+        } yield moduleReport.module -> moduleReport.artifacts).toMap
 
-        pluginNames.zip(plugins).foreach {
-          case (name, plugin) =>
-            state.log.info("\t" + name + " in module " + plugin)
+        val plugins: Seq[(String, ModuleID)] = for {
+          (name, artifactPath) <- pluginArtifactPaths
+          (module, artifacts) <- moduleReports if artifacts.exists {
+            case (_, file) => artifactPath == file.getPath
+          }
+        } yield (name, module)
+
+        plugins foreach {
+          case (name, module) =>
+            state.log.info("\t" + name + " in module ")
+            state.log.info("\t\t" + module)
         }
     }
     state

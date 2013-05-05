@@ -28,7 +28,7 @@ object AboutPluginsBuild extends Build with BuildExtra {
   ) 
 
   def extraPom = (
-    <url>http://your.project.url</url>
+    <url>http://github.com/jozic/sbt-about-plugins</url>
     <licenses>
       <license>
         <name>BSD-style</name>

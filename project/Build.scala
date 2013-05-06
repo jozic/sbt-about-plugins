@@ -24,6 +24,7 @@ object AboutPluginsBuild extends Build with BuildExtra {
       "Github Repo" at "http://jozic.github.com/maven"
     ),
     scalacOptions ++= Seq("-deprecation", "-unchecked"),
+    crossScalaVersions := Seq("2.9.2", "2.9.3", "2.10.0", "2.10.1"),
     libraryDependencies ++= Seq()
   ) 
 

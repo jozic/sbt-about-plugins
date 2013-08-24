@@ -13,9 +13,9 @@ object AboutPluginsPlugin extends Plugin {
 
   def doCommand(state: State): State = {
     loadedPlugins(state) match {
-      case Seq() => state.log.error("Plugins list is empty...")
+      case Seq() => state.log.info("Plugins list is empty...")
       case plugins =>
-        state.log.info("The following plugins are loaded with this build:")
+        state.log.info("The following " + plugins.size + " plugins are loaded with this build:")
         plugins foreach {
           case (name, module) =>
             state.log.info("\t" + name + " in module ")
@@ -24,7 +24,6 @@ object AboutPluginsPlugin extends Plugin {
     }
     state
   }
-
 
   def loadedPlugins(state: State): Seq[(String, ModuleID)] = {
     val structure: BuildStructure = Project.extract(state).structure
@@ -54,6 +53,6 @@ object AboutPluginsPlugin extends Plugin {
         }
         } yield (name, module)
         plugins
-    }
+    }.sortBy(_._1)
   }
 }

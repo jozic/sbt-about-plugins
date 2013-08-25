@@ -1,3 +1,4 @@
+import com.typesafe.sbt.pgp.PgpSettings
 import sbt._
 import Keys._
 
@@ -8,12 +9,12 @@ object AboutPluginsBuild extends Build with BuildExtra {
     Defaults.defaultSettings ++
       CrossBuilding.scriptedSettings ++
       CrossBuilding.settings ++
+      PgpSettings.projectSettings ++
       Seq(
         sbtPlugin := true,
         organization := "com.github.jozic",
         name := "sbt-about-plugins",
         version := "0.1.0-SNAPSHOT",
-        publishTo := Some(Resolver.file("Github Pages", Path.userHome / "git" / "jozic.github.com" / "maven" asFile)(Patterns(true, Resolver.mavenStyleBasePattern))),
         publishTo <<= version {
           (v: String) =>
             val nexus = "https://oss.sonatype.org/"
@@ -24,13 +25,9 @@ object AboutPluginsBuild extends Build with BuildExtra {
         publishArtifact in Test := false,
         pomIncludeRepository := (_ => false),
         pomExtra := extraPom,
-        resolvers ++= Seq(
-          Classpaths.typesafeSnapshots,
-          "Github Repo" at "http://jozic.github.com/maven"
-        ),
         scalacOptions ++= Seq("-deprecation", "-unchecked"),
         CrossBuilding.crossSbtVersions := Seq("0.12", "0.13"),
-        libraryDependencies ++= Seq()
+        PgpSettings.useGpg := true
       )
 
   def extraPom =

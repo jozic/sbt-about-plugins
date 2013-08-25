@@ -28,7 +28,7 @@ object AboutPluginsPlugin extends Plugin {
   def loadedPlugins(state: State): Seq[(String, ModuleID)] = {
     val structure: BuildStructure = Project.extract(state).structure
     val pluginNamesAndLoaders = structure.units.values.map(un => (un.unit.plugins.pluginNames, un.unit.plugins.loader)).toSeq
-    state.log.debug(pluginNamesAndLoaders.mkString(", "))
+    state.log.debug(pluginNamesAndLoaders.mkString("\n"))
 
     val pluginArtifactPaths: Seq[(String, String)] = for {
       (names, loader) <- pluginNamesAndLoaders
@@ -36,7 +36,8 @@ object AboutPluginsPlugin extends Plugin {
       source <- Option(Class.forName(name, true, loader).getProtectionDomain.getCodeSource)
       location <- Option(source.getLocation)
     } yield (name, location.getPath)
-    state.log.debug(pluginArtifactPaths.mkString(", "))
+    state.log.debug("plugin artifact paths:\n")
+    state.log.debug(pluginArtifactPaths.mkString("\n"))
 
     val reports: Seq[UpdateReport] = structure.units.values.flatMap(un => un.unit.plugins.pluginData.report).toSeq
     reports.flatMap {

@@ -14,7 +14,7 @@ object AboutPluginsBuild extends Build with BuildExtra {
         sbtPlugin := true,
         organization := "com.github.jozic",
         name := "sbt-about-plugins",
-        version := "0.1.0-SNAPSHOT",
+        version := "0.1.0",
         publishTo <<= version {
           (v: String) =>
             val nexus = "https://oss.sonatype.org/"

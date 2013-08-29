@@ -11,13 +11,15 @@ Requirements
 Installation
 ------------
 
-Only a SNAPSHOT version available at this time
+To use **latest stable** version add this line to your **plugins.sbt**:
 
-To use the **latest snapshot** version, add Sonatype snapshots repository resolver into **plugins.sbt** file:
+    addSbtPlugin("com.github.jozic" % "sbt-about-plugins" % "0.1.0")
+
+To use the **latest snapshot** version, also add Sonatype snapshots repository resolver:
 
     resolvers += "Sonatype snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
 
-    addSbtPlugin("com.github.jozic" % "sbt-about-plugins" % "0.1.0-SNAPSHOT")
+    addSbtPlugin("com.github.jozic" % "sbt-about-plugins" % "0.1.1-SNAPSHOT")
 
 Usage
 -----

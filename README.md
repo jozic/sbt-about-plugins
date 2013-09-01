@@ -20,6 +20,10 @@ To use the **latest snapshot** version, also add Sonatype snapshots repository r
     resolvers += "Sonatype snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
 
     addSbtPlugin("com.github.jozic" % "sbt-about-plugins" % "0.1.1-SNAPSHOT")
+    
+Alternatively you can declare the plugin in global configuration to make it available for all your projects:  
+    for sbt 0.12.x add it to `~/.sbt/plugins/build.sbt`  
+    for sbt 0.13.x add it to `~/.sbt/0.13/plugins/build.sbt`
 
 Usage
 -----

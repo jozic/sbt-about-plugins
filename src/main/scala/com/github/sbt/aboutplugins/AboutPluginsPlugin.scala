@@ -2,7 +2,7 @@ package com.github.sbt.aboutplugins
 
 import sbt._
 import collection.Seq
-import sbt.Load.BuildStructure
+import sbt.BuildStructure
 
 object AboutPluginsPlugin extends Plugin {
   override lazy val settings = Seq(
@@ -27,7 +27,7 @@ object AboutPluginsPlugin extends Plugin {
 
   def loadedPlugins(state: State): Seq[(String, ModuleID)] = {
     val structure: BuildStructure = Project.extract(state).structure
-    val pluginNamesAndLoaders = structure.units.values.map(un => (un.unit.plugins.pluginNames, un.unit.plugins.loader)).toSeq
+    val pluginNamesAndLoaders = structure.units.values.map(un => (un.unit.plugins.detected.plugins.names, un.unit.plugins.loader)).toSeq
     state.log.debug(pluginNamesAndLoaders.mkString("\n"))
 
     val pluginArtifactPaths: Seq[(String, String)] = for {
